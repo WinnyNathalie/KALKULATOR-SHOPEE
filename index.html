@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Kalkulator sederhana untuk menghitung biaya dan keuntungan bersih penjualan Shopee." />
+  <title>Kalkulator Shopee</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero">
+      <p>KALKULATOR PENJUAL</p>
+      <h1>Kalkulator Shopee</h1>
+      <p class="hero-copy">
+        Hitung biaya admin, program layanan, PPN, PPh 22, dan keuntungan bersih produk.
+      </p>
+    </section>
+
+    <section class="calculator-grid">
+      <form class="card form-card" id="calculatorForm" autocomplete="off">
+        <div class="card-heading">
+          <div>
+            <p class="section-label">DATA PENJUALAN</p>
+            <h2>Masukkan nilai transaksi</h2>
+          </div>
+          <button class="button button-ghost" id="resetButton" type="button">Reset</button>
+        </div>
+
+        <div class="field-grid">
+          <label class="field">
+            <span class="field-label">Harga Jual</span>
+            <span class="input-wrap">
+              <span class="prefix">Rp</span>
+              <input
+                id="sellingPrice"
+                class="currency-input"
+                type="text"
+                inputmode="numeric"
+                value="0"
+                aria-label="Harga jual"
+              />
+            </span>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Modal Produk</span>
+            <span class="input-wrap">
+              <span class="prefix">Rp</span>
+              <input
+                id="capitalCost"
+                class="currency-input"
+                type="text"
+                inputmode="numeric"
+                value="0"
+                aria-label="Modal produk"
+              />
+            </span>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Biaya Admin Shopee</span>
+            <span class="input-wrap">
+              <input
+                id="adminPercent"
+                class="percent-input"
+                type="text"
+                inputmode="decimal"
+                value="0"
+                aria-label="Persentase biaya admin Shopee"
+              />
+              <span class="suffix">%</span>
+            </span>
+            <small>Masukkan persentase sesuai kategori produk.</small>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Biaya Proses Pesanan</span>
+            <span class="input-wrap is-readonly">
+              <span class="prefix">Rp</span>
+              <input
+                id="orderProcessFee"
+                type="text"
+                inputmode="numeric"
+                value="1.250"
+                readonly
+                aria-label="Biaya proses pesanan"
+              />
+            </span>
+            <small>Biaya tetap per pesanan.</small>
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-heading">
+          <div>
+            <p class="section-label">BIAYA LAYANAN</p>
+            <h2>Program yang diikuti</h2>
+          </div>
+          <span class="optional-chip">Opsional</span>
+        </div>
+
+        <div class="toggle-list">
+          <div class="toggle-row">
+            <label class="switch-label" for="freeShippingToggle">
+              <span>
+                <strong>Program Gratis Ongkir</strong>
+                <small>Persentase dari harga jual</small>
+              </span>
+              <span class="switch">
+                <input id="freeShippingToggle" type="checkbox" />
+                <span class="slider"></span>
+              </span>
+            </label>
+            <div class="toggle-input is-hidden" id="freeShippingField">
+              <span class="input-wrap">
+                <input id="freeShippingPercent" class="percent-input" type="text" inputmode="decimal" value="0" />
+                <span class="suffix">%</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="toggle-row">
+            <label class="switch-label" for="promoXtraToggle">
+              <span>
+                <strong>Program Promo XTRA</strong>
+                <small>Persentase dari harga jual</small>
+              </span>
+              <span class="switch">
+                <input id="promoXtraToggle" type="checkbox" />
+                <span class="slider"></span>
+              </span>
+            </label>
+            <div class="toggle-input is-hidden" id="promoXtraField">
+              <span class="input-wrap">
+                <input id="promoXtraPercent" class="percent-input" type="text" inputmode="decimal" value="0" />
+                <span class="suffix">%</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="toggle-row">
+            <label class="switch-label" for="promoXtraPlusToggle">
+              <span>
+                <strong>Program Promo XTRA+</strong>
+                <small>Persentase dari harga jual</small>
+              </span>
+              <span class="switch">
+                <input id="promoXtraPlusToggle" type="checkbox" />
+                <span class="slider"></span>
+              </span>
+            </label>
+            <div class="toggle-input is-hidden" id="promoXtraPlusField">
+              <span class="input-wrap">
+                <input id="promoXtraPlusPercent" class="percent-input" type="text" inputmode="decimal" value="0" />
+                <span class="suffix">%</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-heading">
+          <div>
+            <p class="section-label">PAJAK</p>
+            <h2>Komponen pajak</h2>
+          </div>
+        </div>
+
+        <div class="tax-list">
+          <label class="switch-label tax-option" for="vatToggle">
+            <span>
+              <strong>Lapor PPN</strong>
+              <small>Harga jual ÷ 1,11 × 11%</small>
+            </span>
+            <span class="switch">
+              <input id="vatToggle" type="checkbox" checked />
+              <span class="slider"></span>
+            </span>
+          </label>
+
+          <label class="switch-label tax-option" for="pphToggle">
+            <span>
+              <strong>PPh 22</strong>
+              <small>0,5% dari harga jual</small>
+            </span>
+            <span class="switch">
+              <input id="pphToggle" type="checkbox" checked />
+              <span class="slider"></span>
+            </span>
+          </label>
+        </div>
+      </form>
+
+      <aside class="card result-card">
+        <div class="result-top">
+          <p class="section-label">HASIL PERHITUNGAN</p>
+          <div class="profit-status loss" id="profitStatus">RUGI</div>
+        </div>
+
+        <p class="result-caption">Keuntungan Bersih</p>
+        <p class="result-value negative" id="netProfit">-Rp2.592,34</p>
+        <p class="margin-text" id="profitMargin">Margin -1,48%</p>
+
+        <div class="summary-box">
+          <div class="summary-row">
+            <span>Harga Jual</span>
+            <strong id="summarySellingPrice">Rp175.000</strong>
+          </div>
+          <div class="summary-row">
+            <span>Modal</span>
+            <strong id="summaryCapitalCost">-Rp124.000</strong>
+          </div>
+          <div class="summary-row">
+            <span>Biaya Admin</span>
+            <strong id="summaryAdminFee">-Rp17.500</strong>
+          </div>
+          <div class="summary-row">
+            <span>Proses Pesanan</span>
+            <strong id="summaryOrderFee">-Rp1.250</strong>
+          </div>
+          <div class="summary-row optional-result" id="freeShippingResult">
+            <span>Gratis Ongkir</span>
+            <strong id="summaryFreeShipping">-Rp16.625</strong>
+          </div>
+          <div class="summary-row optional-result is-hidden" id="promoXtraResult">
+            <span>Promo XTRA</span>
+            <strong id="summaryPromoXtra">-Rp0</strong>
+          </div>
+          <div class="summary-row optional-result is-hidden" id="promoXtraPlusResult">
+            <span>Promo XTRA+</span>
+            <strong id="summaryPromoXtraPlus">-Rp0</strong>
+          </div>
+          <div class="summary-row optional-result" id="vatResult">
+            <span>PPN</span>
+            <strong id="summaryVat">-Rp17.342,34</strong>
+          </div>
+          <div class="summary-row optional-result" id="pphResult">
+            <span>PPh 22</span>
+            <strong id="summaryPph">-Rp875</strong>
+          </div>
+          <div class="summary-row total-row">
+            <span>Total Potongan + Modal</span>
+            <strong id="summaryTotalCost">Rp177.592,34</strong>
+          </div>
+        </div>
+      
+        
+      </aside>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
