@@ -484,14 +484,14 @@ elements.resetButton.addEventListener(
     elements.capitalCost.value = "";
 
     // Biaya admin kembali ke 10%.
-    elements.adminPercent.value = "10";
+    elements.adminPercent.value = "0";
 
     // Matikan program Gratis Ongkir.
     elements.freeShippingToggle.checked =
       false;
 
     elements.freeShippingPercent.value =
-      "9,5";
+      "0";
 
     elements.freeShippingField.classList.add(
       "is-hidden"
