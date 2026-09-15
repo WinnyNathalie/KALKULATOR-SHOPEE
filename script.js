@@ -521,7 +521,7 @@ elements.resetButton.addEventListener(
 
     // PPN dan PPh 22 tetap aktif.
     elements.vatToggle.checked = true;
-    elements.pphToggle.checked = true;
+    elements.pphToggle.checked = false;
 
     elements.copyFeedback.textContent = "";
 
