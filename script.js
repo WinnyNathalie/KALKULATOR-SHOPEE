@@ -75,6 +75,17 @@ function parsePercent(value) {
   return Number.isFinite(result) ? Math.max(0, result) : 0;
 }
 
+function sanitizePercentInput(value) {
+  let hasDecimal = false;
+  return String(value).replace(/[^0-9]/g, (character) => {
+    if ((character === "," || character === ".") && !hasDecimal) {
+      hasDecimal = true;
+      return character;
+    }
+    return "";
+  });
+}
+
 function formatInputCurrency(value) {
   const number = parseCurrency(value);
 
@@ -275,7 +286,7 @@ function render(data) {
     formatCurrency(netProfit, true);
 
   elements.profitMargin.textContent =
-    `Margin ${formatPercent(margin)}%`;
+    `Margin penjualan ${formatPercent(margin)}%`;
 
   elements.freeShippingResult.classList.toggle(
     "is-hidden",
@@ -451,18 +462,27 @@ document
 document
   .querySelectorAll(".percent-input")
   .forEach((input) => {
-    input.addEventListener(
-      "input",
-      calculate
-    );
+    // Covers typing, paste, drag-and-drop, and mobile keyboard input.
+    input.addEventListener("input", () => {
+      const value = input.value;
+      const cursor = input.selectionStart;
+      input.value = sanitizePercentInput(value);
+      if (cursor != null) {
+        const position = sanitizePercentInput(value.slice(0, cursor)).length;
+        input.setSelectionRange(position, position);
+      }
+      calculate();
+    });
 
     input.addEventListener("blur", () => {
       const value = parsePercent(
         input.value
       );
 
-      input.value =
-        formatPercent(value);
+      input.value = new Intl.NumberFormat("id-ID", {
+        useGrouping: false,
+        maximumFractionDigits: 2,
+      }).format(value);
 
       calculate();
     });
@@ -500,7 +520,7 @@ elements.resetButton.addEventListener(
     elements.sellingPrice.value = "";
     elements.capitalCost.value = "";
 
-    // Biaya admin kembali ke 10%.
+    // Kosongkan persentase biaya admin.
     elements.adminPercent.value = "";
 
     // Matikan program Gratis Ongkir.
@@ -538,7 +558,7 @@ elements.resetButton.addEventListener(
 
     // PPN dan PPh 22 tetap aktif.
     elements.vatToggle.checked = true;
-    elements.pphToggle.checked = false;
+    elements.pphToggle.checked = true;
 
     elements.copyFeedback.textContent = "";
 
@@ -561,23 +581,22 @@ elements.copyButton.addEventListener(
       elements.copyFeedback.textContent =
         "Ringkasan berhasil disalin.";
     } catch {
-      const textarea =
-        document.createElement("textarea");
-
+      const textarea = document.createElement("textarea");
       textarea.value = summary;
       textarea.style.position = "fixed";
       textarea.style.opacity = "0";
-
+      const previousFocus = document.activeElement;
       document.body.appendChild(textarea);
-
       textarea.select();
-
-      document.execCommand("copy");
-
-      textarea.remove();
-
-      elements.copyFeedback.textContent =
-        "Ringkasan berhasil disalin.";
+      try {
+        if (!document.execCommand("copy")) throw new Error("Salin tidak tersedia");
+        elements.copyFeedback.textContent = "Ringkasan berhasil disalin.";
+      } catch {
+        elements.copyFeedback.textContent = "Tidak dapat menyalin. Izinkan akses clipboard lalu coba lagi.";
+      } finally {
+        textarea.remove();
+        previousFocus?.focus({ preventScroll: true });
+      }
     }
 
     window.setTimeout(() => {
@@ -588,3 +607,34 @@ elements.copyButton.addEventListener(
 );
 
 calculate();
+
+const themeToggle = document.getElementById("themeToggle");
+function updateThemeButton() {
+  const dark = document.documentElement.dataset.theme !== "light";
+  themeToggle.textContent = dark ? "Light mode" : "Dark mode";
+  themeToggle.setAttribute("aria-label", dark ? "Aktifkan tema terang" : "Aktifkan tema gelap");
+}
+themeToggle.addEventListener("click", () => {
+  const theme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+  document.documentElement.dataset.theme = theme;
+  try { localStorage.setItem("shopee-theme", theme); } catch {}
+  updateThemeButton();
+});
+updateThemeButton();
+const inputTab = document.getElementById("inputTab");
+const resultTab = document.getElementById("resultTab");
+const resultPanel = document.getElementById("resultPanel");
+function showMobilePanel(panel, focus = false) {
+  document.body.dataset.panel = panel;
+  inputTab.setAttribute("aria-pressed", String(panel === "input"));
+  resultTab.setAttribute("aria-pressed", String(panel === "result"));
+  if (focus && window.matchMedia("(max-width: 760px)").matches) {
+    (panel === "result" ? resultPanel : elements.sellingPrice).focus({ preventScroll: true });
+    document.querySelector(".mobile-tabs").scrollIntoView({ block: "start" });
+  }
+}
+inputTab.addEventListener("click", () => showMobilePanel("input", true));
+resultTab.addEventListener("click", () => showMobilePanel("result", true));
+document.getElementById("viewResultsButton").addEventListener("click", () => showMobilePanel("result", true));
+elements.form.addEventListener("submit", event => event.preventDefault());
+showMobilePanel("input");

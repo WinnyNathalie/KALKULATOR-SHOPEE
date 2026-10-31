@@ -1,21 +1,31 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Kalkulator sederhana untuk menghitung biaya dan keuntungan bersih penjualan Shopee." />
+  <meta name="description" content="Kalkulator sederhana untuk membantu seller menghitung biaya dan keuntungan bersih penjualan Shopee." />
   <title>Kalkulator Shopee</title>
+  <script>
+    try { document.documentElement.dataset.theme = localStorage.getItem("shopee-theme") === "light" ? "light" : "dark"; } catch {}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;650;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="page-shell">
-    <section class="hero">
-      <p>KALKULATOR PENJUAL</p>
-      <h1>Kalkulator Shopee</h1>
-      <p class="hero-copy">
-        Hitung biaya admin, program layanan, PPN, PPh 22, dan keuntungan bersih produk.
-      </p>
-    </section>
+    <header class="hero">
+      <div class="brand"><div>
+        <p class="eyebrow">SELLER TOOLS</p><h1>Kalkulator Shopee</h1>
+      </div></div>
+      <button type="button" class="button button-ghost theme-toggle" id="themeToggle" aria-label="Aktifkan tema terang">Light mode</button>
+    </header>
+    <div class="page-intro"><p>Hitung biaya dan pahami keuntungan bersih penjualan Anda.</p></div>
+    <nav class="mobile-tabs" aria-label="Navigasi kalkulator">
+      <button type="button" id="inputTab" aria-pressed="true" aria-controls="calculatorForm">Hitung</button>
+      <button type="button" id="resultTab" aria-pressed="false" aria-controls="resultPanel">Hasil</button>
+    </nav>
 
     <section class="calculator-grid">
       <form class="card form-card" id="calculatorForm" autocomplete="off">
@@ -71,7 +81,6 @@
               />
               <span class="suffix">%</span>
             </span>
-            <small>Masukkan persentase sesuai kategori produk.</small>
           </label>
 
           <label class="field">
@@ -87,7 +96,6 @@
                 aria-label="Biaya proses pesanan"
               />
             </span>
-            <small>Biaya tetap per pesanan.</small>
           </label>
         </div>
 
@@ -115,7 +123,7 @@
             </label>
             <div class="toggle-input is-hidden" id="freeShippingField">
               <span class="input-wrap">
-                <input id="freeShippingPercent" class="percent-input" type="text" inputmode="decimal" value="0" />
+                <input aria-label="Persentase Gratis Ongkir" id="freeShippingPercent" class="percent-input" type="text" inputmode="decimal" value="0" />
                 <span class="suffix">%</span>
               </span>
             </div>
@@ -134,7 +142,7 @@
             </label>
             <div class="toggle-input is-hidden" id="promoXtraField">
               <span class="input-wrap">
-                <input id="promoXtraPercent" class="percent-input" type="text" inputmode="decimal" value="0" />
+                <input aria-label="Persentase Promo XTRA" id="promoXtraPercent" class="percent-input" type="text" inputmode="decimal" value="0" />
                 <span class="suffix">%</span>
               </span>
             </div>
@@ -153,7 +161,7 @@
             </label>
             <div class="toggle-input is-hidden" id="promoXtraPlusField">
               <span class="input-wrap">
-                <input id="promoXtraPlusPercent" class="percent-input" type="text" inputmode="decimal" value="0" />
+                <input aria-label="Persentase Promo XTRA+" id="promoXtraPlusPercent" class="percent-input" type="text" inputmode="decimal" value="0" />
                 <span class="suffix">%</span>
               </span>
             </div>
@@ -173,7 +181,7 @@
           <label class="switch-label tax-option" for="vatToggle">
             <span>
               <strong>Lapor PPN</strong>
-              <small>Harga jual ÷ 1,11 × 11%</small>
+              <small>(Harga jual / 1,11) x 11%</small>
             </span>
             <span class="switch">
               <input id="vatToggle" type="checkbox" checked />
@@ -184,17 +192,18 @@
           <label class="switch-label tax-option" for="pphToggle">
             <span>
               <strong>PPh 22</strong>
-              <small>0,5% dari harga jual</small>
+              <small id="pphDescription">(Harga jual / 1,11) x 0,5%</small>
             </span>
             <span class="switch">
-              <input id="pphToggle" type="checkbox"/>
+              <input id="pphToggle" type="checkbox" checked/>
               <span class="slider"></span>
             </span>
           </label>
         </div>
+        <button class="button button-primary mobile-result-button" id="viewResultsButton" type="button">Lihat Hasil</button>
       </form>
 
-      <aside class="card result-card">
+      <aside class="card result-card" id="resultPanel" tabindex="-1" aria-label="Hasil perhitungan">
         <div class="result-top">
           <p class="section-label">HASIL PERHITUNGAN</p>
           <div class="profit-status loss" id="profitStatus">RUGI</div>
@@ -265,6 +274,7 @@
         
       </aside>
     </section>
+   
   </main>
 
   <script src="script.js"></script>
