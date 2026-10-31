@@ -14,14 +14,19 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="star-sky" aria-hidden="true">
+    <span class="star-layer star-layer-far"></span>
+    <span class="star-layer star-layer-near"></span>
+    <span class="star-layer star-layer-glitter"></span>
+  </div>
   <main class="page-shell">
     <header class="hero">
       <div class="brand"><div>
-        <p class="eyebrow">SELLER TOOLS</p><h1>Kalkulator Shopee</h1>
+        <p class="eyebrow">Seller tools</p><h1>Kalkulator Shopee</h1>
       </div></div>
       <button type="button" class="button button-ghost theme-toggle" id="themeToggle" aria-label="Aktifkan tema terang">Light mode</button>
     </header>
-    <div class="page-intro"><p>Hitung biaya dan pahami keuntungan bersih penjualan Anda.</p></div>
+  
     <nav class="mobile-tabs" aria-label="Navigasi kalkulator">
       <button type="button" id="inputTab" aria-pressed="true" aria-controls="calculatorForm">Hitung</button>
       <button type="button" id="resultTab" aria-pressed="false" aria-controls="resultPanel">Hasil</button>
@@ -31,7 +36,7 @@
       <form class="card form-card" id="calculatorForm" autocomplete="off">
         <div class="card-heading">
           <div>
-            <p class="section-label">DATA PENJUALAN</p>
+            <p class="section-label">Data penjualan</p>
             <h2>Masukkan nilai transaksi</h2>
           </div>
           <button class="button button-ghost" id="resetButton" type="button">Reset</button>
@@ -103,7 +108,7 @@
 
         <div class="section-heading">
           <div>
-            <p class="section-label">BIAYA LAYANAN</p>
+            <p class="section-label">Biaya layanan</p>
             <h2>Program yang diikuti</h2>
           </div>
           <span class="optional-chip">Opsional</span>
@@ -172,7 +177,7 @@
 
         <div class="section-heading">
           <div>
-            <p class="section-label">PAJAK</p>
+            <p class="section-label">Pajak</p>
             <h2>Komponen pajak</h2>
           </div>
         </div>
@@ -205,7 +210,7 @@
 
       <aside class="card result-card" id="resultPanel" tabindex="-1" aria-label="Hasil perhitungan">
         <div class="result-top">
-          <p class="section-label">HASIL PERHITUNGAN</p>
+          <p class="section-label">Hasil perhitungan</p>
           <div class="profit-status loss" id="profitStatus">RUGI</div>
         </div>
 

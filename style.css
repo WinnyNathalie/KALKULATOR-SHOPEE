@@ -5,6 +5,7 @@
   --surface-soft: #1d2123;
   --text: #f3f4f6;
   --muted: #9ca3af;
+  --eyebrow: #8fc9b1;
   --border: #303537;
   --primary: #13b981;
   --primary-hover: #24ce94;
@@ -15,6 +16,16 @@
   --card-shadow: 0 8px 28px rgba(0, 0, 0, .12);
   --card-hover-border: #3b5048;
   --focus-ring: rgba(19, 185, 129, .12);
+  --button-tint: rgba(19, 185, 129, .1);
+  --glass-surface: rgba(22, 27, 28, .78);
+  --glass-input: rgba(9, 14, 13, .38);
+  --glass-soft: rgba(39, 48, 45, .5);
+  --glass-edge: rgba(221, 244, 234, .1);
+  --glass-shine: rgba(236, 255, 246, .035);
+  --ambient: rgba(19, 185, 129, .075);
+  --star-color: #d4e9e1;
+  --star-accent: #71c9a7;
+  --star-opacity: .6;
 }
 :root[data-theme="light"] {
   color-scheme: light;
@@ -23,6 +34,7 @@
   --surface-soft: #edf1ef;
   --text: #16221e;
   --muted: #5e6b65;
+  --eyebrow: #327457;
   --border: #d4ddd8;
   --primary: #13b981;
   --primary-hover: #24ce94;
@@ -32,17 +44,29 @@
   --card-shadow: 0 8px 32px rgba(28, 52, 41, .045);
   --card-hover-border: #bed9cc;
   --focus-ring: rgba(19, 185, 129, .1);
+  --button-tint: rgba(19, 185, 129, .08);
+  --glass-surface: rgba(255, 255, 255, .76);
+  --glass-input: rgba(255, 255, 255, .52);
+  --glass-soft: rgba(233, 242, 237, .6);
+  --glass-edge: rgba(255, 255, 255, .85);
+  --glass-shine: rgba(255, 255, 255, .4);
+  --ambient: rgba(19, 185, 129, .085);
+  --star-color: #41745f;
+  --star-accent: #36815f;
+  --star-opacity: .22;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text); font-family: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 18px; font-weight: 500; line-height: 1.6; }
+body { min-height: 100vh; background-image: radial-gradient(ellipse 85% 650px at 95% 0%, var(--ambient), transparent 75%), radial-gradient(ellipse 70% 550px at 0% 80%, var(--ambient), transparent 80%); }
 button, input { font: inherit; }
 button { cursor: pointer; }
 button, input { -webkit-tap-highlight-color: transparent; }
 button:focus-visible, input:focus-visible, .switch input:focus-visible + .slider { outline: 2px solid var(--primary); outline-offset: 4px; }
-.page-shell { width: min(1120px, calc(100% - 32px)); margin: auto; padding: 24px 0 48px; }
-.hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.page-shell { position: relative; z-index: 1; width: min(1120px, calc(100% - 32px)); margin: auto; padding: 24px 0 48px; }
+.hero { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 24px; }
 .brand { display: flex; align-items: center; gap: 12px; }
-.eyebrow { color: var(--muted); font-family: "Manrope", sans-serif; font-size: 12px; letter-spacing: .07em; margin: 0 0 3px; font-weight: 700; }
+.eyebrow, .section-label { color: var(--eyebrow); font-family: inherit; font-size: 14px; font-weight: 600; letter-spacing: 0; line-height: 1.5; }
+.eyebrow { margin: 0 0 5px; }
 h1 { font-size: 21px; letter-spacing: -.035em; margin: 0; font-weight: 650; }
 .page-intro { padding: 28px 0; }
 .page-intro p { margin: 0 0 5px; font-size: 24px; letter-spacing: -.025em; font-weight: 600; }
@@ -50,7 +74,7 @@ h1 { font-size: 21px; letter-spacing: -.035em; margin: 0; font-weight: 650; }
 .calculator-grid { display: grid; gap: 28px; align-items: start; }
 .card { min-width: 0; border: 1px solid var(--card-border); border-radius: var(--radius); background: var(--surface); padding: 24px; box-shadow: var(--card-shadow); }
 .card-heading, .section-heading, .result-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.section-label { color: var(--muted); font-family: "Manrope", sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .055em; line-height: 1.5; margin: 0 0 7px; }
+.section-label { margin: 0 0 8px; }
 h2 { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -.02em; }
 .field-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 24px; }
 .field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
@@ -65,7 +89,8 @@ h2 { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -.02em; }
 .prefix { padding-left: 18px; }
 .suffix { padding-right: 18px; }
 .divider { height: 1px; background: var(--card-border); margin: 32px 0; }
-.optional-chip { color: var(--muted); font-size: 12px; border: 1px solid var(--border); border-radius: 999px; padding: 3px 8px; }
+.optional-chip, .profit-status { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-height: 34px; min-width: 78px; padding: 8px 14px; border-radius: 999px; line-height: 1.2; white-space: nowrap; }
+.optional-chip { color: var(--muted); font-size: 12px; font-weight: 600; border: 1px solid var(--border); background: var(--surface-soft); }
 .toggle-list, .tax-list { margin-top: 12px; }
 .toggle-row, .tax-option { padding: 18px 0; border-bottom: 1px solid var(--card-border); }
 .toggle-row:last-child, .tax-option:last-child { border-bottom: 0; padding-bottom: 0; }
@@ -80,8 +105,13 @@ h2 { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -.02em; }
 .switch input:checked + .slider::before { transform: translateX(14px); }
 .toggle-input { width: 130px; margin-top: 12px; }
 .button { min-height: 46px; border-radius: 999px; padding: 11px 22px; font-size: 14px; font-weight: 600; }
-.button-ghost { border: 1px solid var(--border); background: transparent; color: var(--text); }
+.button-ghost { position: relative; isolation: isolate; overflow: hidden; border: 1px solid var(--border); background: transparent; color: var(--text); }
 .button-ghost:hover { background: var(--surface-soft); }
+#resetButton { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; min-width: 90px; min-height: 44px; padding: 11px 20px; line-height: 1.25; }
+.button-ghost::before { content: ""; position: absolute; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .2s ease; }
+.button-ghost::before { inset: 0; background: linear-gradient(180deg, transparent 25%, var(--button-tint)); border-radius: inherit; }
+.button-ghost:focus-visible::before, .button-ghost:active::before { opacity: 1; }
+.button-ghost:active { box-shadow: inset 0 1px 3px var(--button-tint); }
 .button-primary { width: 100%; border: 1px solid var(--primary); background: var(--primary); color: #062c20; margin-top: 24px; min-height: 50px; }
 .button-primary:hover { background: var(--primary-hover); }
 :root[data-theme="light"] #copyButton {
@@ -98,7 +128,7 @@ h2 { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -.02em; }
 }
 .theme-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
 .result-top .section-label { margin: 0; }
-.profit-status { font-size: 12px; font-weight: 700; letter-spacing: .08em; padding: 4px 8px; border: 1px solid currentColor; border-radius: 999px; }
+.profit-status { font-size: 12px; font-weight: 700; letter-spacing: .035em; border: 1px solid currentColor; }
 .profit, .positive { color: var(--success); }
 .loss, .negative { color: var(--danger); }
 .neutral { color: var(--muted); }
@@ -122,6 +152,111 @@ h2 { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -.02em; }
 .developer-footer a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .developer-footer a:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; border-radius: 3px; }
 
+
+/* Decorative sky stays behind the calculator and never intercepts input. */
+.star-sky { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; opacity: var(--star-opacity); transition: opacity .3s ease; }
+.star-layer { position: absolute; inset: 0; opacity: .65; background-repeat: no-repeat; }
+.star-layer-far { background-image:
+    radial-gradient(circle at 4.04% 6.26%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 5.70% 65.65%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 63.89% 48.47%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 61.98% 75.53%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 17.81% 95.35%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 6.31% 18.03%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 72.53% 27.69%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 59.27% 81.07%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 97.82% 12.32%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 32.30% 27.19%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 66.04% 81.96%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 30.01% 52.92%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 84.58% 37.97%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 23.13% 69.83%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 22.67% 79.58%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 81.52% 30.80%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 6.01% 91.08%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 8.81% 13.03%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 4.73% 54.53%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 24.06% 41.26%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 28.21% 47.34%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 32.12% 42.70%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 64.26% 36.43%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 39.99% 61.19%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 76.10% 88.27%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 76.80% 18.04%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 10.74% 6.45%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 14.93% 59.17%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 84.13% 24.17%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 97.69% 55.91%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 96.74% 75.25%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 27.02% 18.99%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 12.94% 87.07%, var(--star-color) 0 0.65px, transparent 1.25px),
+    radial-gradient(circle at 56.96% 41.33%, var(--star-color) 0 0.65px, transparent 1.25px); }
+.star-layer-near { background-image:
+    radial-gradient(circle at 29.67% 18.95%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 74.02% 41.00%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 16.09% 25.63%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 62.29% 79.90%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 53.41% 93.03%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 94.56% 41.65%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 84.70% 54.13%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 31.06% 68.23%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 68.00% 52.26%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 91.30% 10.82%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 34.19% 7.36%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 32.51% 14.37%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 51.37% 24.69%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 68.14% 59.35%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 24.93% 61.58%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 59.97% 52.27%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 55.01% 71.55%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 69.37% 64.41%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 80.90% 45.46%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 97.02% 54.21%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 61.63% 65.17%, var(--star-color) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 32.88% 64.98%, var(--star-color) 0 1px, transparent 1.6px); }
+.star-layer-glitter { background-image:
+    radial-gradient(circle at 46.48% 29.02%, var(--star-accent) 0 1.4px, transparent 2px),
+    radial-gradient(circle at 93.66% 89.22%, var(--star-accent) 0 1.4px, transparent 2px),
+    radial-gradient(circle at 88.86% 76.96%, var(--star-accent) 0 1.4px, transparent 2px),
+    radial-gradient(circle at 33.38% 63.27%, var(--star-accent) 0 1.4px, transparent 2px),
+    radial-gradient(circle at 77.01% 78.53%, var(--star-accent) 0 1.4px, transparent 2px),
+    radial-gradient(circle at 44.56% 95.55%, var(--star-accent) 0 1.4px, transparent 2px),
+    radial-gradient(circle at 58.98% 27.33%, var(--star-accent) 0 1.4px, transparent 2px),
+    radial-gradient(circle at 51.51% 96.16%, var(--star-accent) 0 1.4px, transparent 2px); }
+@media (prefers-reduced-motion: no-preference) {
+  .star-layer-far { animation: star-twinkle 11s ease-in-out infinite alternate; }
+  .star-layer-near { animation: star-twinkle 8s ease-in-out -4s infinite alternate-reverse; }
+  .star-layer-glitter { animation: star-twinkle 6s ease-in-out -2s infinite alternate; }
+  @keyframes star-twinkle { from { opacity: .3; } to { opacity: .85; } }
+}
+@media (max-width: 760px) { .star-layer-glitter { display: none; } }
+
+/* Keep opaque surfaces as a fallback when backdrop blur is unavailable. */
+@supports ((backdrop-filter: blur(12px)) or (-webkit-backdrop-filter: blur(12px))) {
+  .card {
+    background: linear-gradient(155deg, var(--glass-shine), transparent 45%), var(--glass-surface);
+    border-color: var(--glass-edge);
+    box-shadow: inset 0 1px 0 var(--glass-edge), var(--card-shadow);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+  }
+  .input-wrap { background: var(--glass-input); }
+  .input-wrap.is-readonly, .optional-chip { background: var(--glass-soft); }
+  .button-ghost {
+    background: var(--glass-input);
+    box-shadow: inset 0 1px 0 var(--glass-edge);
+  }
+  .button-ghost:hover { background: var(--glass-soft); }
+  .button-ghost:active { box-shadow: inset 0 1px 3px var(--button-tint); }
+  .mobile-tabs {
+    background: var(--glass-soft);
+    box-shadow: inset 0 1px 0 var(--glass-edge);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  .mobile-tabs button[aria-pressed="true"] { background: var(--glass-surface); box-shadow: inset 0 1px 0 var(--glass-edge); }
+}
+
 /* Small interaction cues keep the calculator calm and responsive. */
 body, .card, .input-wrap, .button, .mobile-tabs, .mobile-tabs button {
   transition: background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .16s ease;
@@ -133,11 +268,12 @@ body, .card, .input-wrap, .button, .mobile-tabs, .mobile-tabs button {
   .button:hover { transform: translateY(-1px); }
   .button:active { transform: translateY(1px); }
   .button-ghost:hover { border-color: var(--muted); }
+  .button-ghost:hover::before { opacity: 1; }
   .input-wrap:not(.is-readonly):hover { border-color: var(--muted); }
   .input-wrap:focus-within:hover { border-color: var(--primary); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .card { animation: card-appear .32s ease-out; }
+  .card { animation: card-appear .4s cubic-bezier(.2, .7, .3, 1); }
   @keyframes card-appear {
     from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: translateY(0); }
@@ -145,6 +281,7 @@ body, .card, .input-wrap, .button, .mobile-tabs, .mobile-tabs button {
 }
 @media (max-width: 760px) {
   body[data-panel="input"] .result-card, body[data-panel="result"] .form-card { display: none; }
+  .card { -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 }
 @media (min-width: 480px) { .field-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 761px) {
