@@ -171,9 +171,26 @@ function calculate() {
       (VAT_PERCENT / 100)
     : 0;
 
-  const pph = elements.pphToggle.checked
-    ? sellingPrice * (PPH_PERCENT / 100)
-    : 0;
+  
+const pphTaxBase = elements.vatToggle.checked
+  ? sellingPrice / VAT_DIVISOR
+  : sellingPrice;
+
+const pph = elements.pphToggle.checked
+  ? pphTaxBase * (PPH_PERCENT / 100)
+  : 0;
+
+// Perbarui keterangan berdasarkan pilihan Lapor PPN
+const pphDescription = document.querySelector(
+  'label[for="pphToggle"] small'
+);
+
+if (pphDescription) {
+  pphDescription.textContent = elements.vatToggle.checked
+    ? "Harga jual ÷ 1,11 × 0,5%"
+    : "Harga jual × 0,5%";
+}
+
 
   const totalCost =
     capitalCost +
